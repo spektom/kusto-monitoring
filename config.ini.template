@@ -1,0 +1,13 @@
+[DEFAULT]
+; Can be found under Azure Active Directory -> Overview.
+AAD_TENANT_ID=
+
+; Can be found under your Azure Communication Service -> Keys.
+AZURE_COMMUNICATION_CONNECTION_STRING=
+; Can be found under Email Communication Services Domain -> Mail From addresses.
+AZURE_COMMUNICATION_SENDER=
+; Space separated list of email addresses that will recieve generated alerts.
+RECIPIENTS=
+
+KUSTO_CLUSTER_URL=
+KUSTO_DATABASE_NAME=
