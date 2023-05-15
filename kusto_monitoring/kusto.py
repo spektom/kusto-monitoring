@@ -30,7 +30,7 @@ class QueryResult:
         return len(self.df) == 0
 
     def to_html(self):
-        return self.df.to_html()
+        return self.df.to_html().replace("\\n", "<br>")
 
 
 def run_query(query: str, retries: int = 1) -> QueryResult:
