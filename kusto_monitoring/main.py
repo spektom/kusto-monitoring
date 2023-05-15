@@ -9,7 +9,7 @@ from azure.communication.email import EmailClient
 
 
 def run_query_and_send_alert(alert_name, kql):
-    r = kusto.run_query(kql)
+    r = kusto.run_query(kql, retries=3)
     if not r.is_empty():
         body = r.to_html()
         email_client = EmailClient.from_connection_string(

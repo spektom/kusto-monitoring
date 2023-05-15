@@ -4,6 +4,7 @@ from .config import get_conf
 
 from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
 from azure.kusto.data.helpers import dataframe_from_result_table
+from azure.kusto.data.exceptions import KustoMultiApiError
 
 _client = None
 
@@ -32,11 +33,19 @@ class QueryResult:
         return self.df.to_html()
 
 
-def run_query(query: str) -> QueryResult:
+def run_query(query: str, retries: int = 1) -> QueryResult:
     client = _get_kusto_client()
-    logging.info(f"Running Kusto query: {query}")
-    response = client.execute(get_conf("KUSTO_DATABASE_NAME"), query)
-    return QueryResult(response)
+    retryable_errors = ["0x80DA0006"]
+    while retries > 0:
+        retries -= 1
+        try:
+            logging.debug(f"Running Kusto query: {query}")
+            return QueryResult(client.execute(get_conf("KUSTO_DATABASE_NAME"), query))
+        except KustoMultiApiError as e:
+            if retries > 0 and any(err in str(e) for err in retryable_errors):
+                logging.warning(f"Query execution error: {e}. Retrying in 1 minute.")
+            else:
+                raise
 
 
 def check_connectivity():
