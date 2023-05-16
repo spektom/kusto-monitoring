@@ -23,14 +23,13 @@ def _get_kusto_client():
 class QueryResult:
     def __init__(self, response):
         results = response.primary_results[0]
-        df = dataframe_from_result_table(results)
-        self.df = df.set_index(results.columns[0].column_name)
+        self.df = dataframe_from_result_table(results)
 
     def is_empty(self):
         return len(self.df) == 0
 
     def to_html(self):
-        return self.df.to_html().replace("\\n", "<br>")
+        return self.df.to_html(index=False).replace("\\n", "<br>")
 
 
 def run_query(query: str, retries: int = 1) -> QueryResult:
