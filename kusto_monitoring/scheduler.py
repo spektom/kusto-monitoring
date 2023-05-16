@@ -24,7 +24,7 @@ class Schedule(object):
     def __init__(self, s: str):
         parts = s.strip().split()
         if len(parts) != 5:
-            raise Exception(f"Crontab format is not recognized: {s}")
+            raise Exception(f"crontab format is not recognized: '{s}'")
         self.mins = _parse_crontab_element(parts[0])
         self.hours = _parse_crontab_element(parts[1])
         self.days = _parse_crontab_element(parts[2])
@@ -63,11 +63,15 @@ class Task(object):
 class Scheduler(object):
     def __init__(self, tasks):
         self.tasks = tasks
+        self.stopping = False
+
+    def stop(self):
+        self.stopping = True
 
     def run(self):
-        t = datetime(*datetime.now().timetuple()[:5])
         with ThreadPool() as pool:
-            while True:
+            t = datetime(*datetime.now().timetuple()[:5])
+            while not self.stopping:
                 for task in self.tasks:
                     if task.should_run(t):
                         pool.apply_async(task.run)

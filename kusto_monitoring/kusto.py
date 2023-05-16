@@ -1,7 +1,6 @@
 import logging
 
 from .config import get_conf
-
 from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
 from azure.kusto.data.helpers import dataframe_from_result_table
 from azure.kusto.data.exceptions import KustoMultiApiError

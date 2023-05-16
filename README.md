@@ -7,7 +7,7 @@ Simplistic monitoring tool based on Kusto queries.
 
 1. Install the following system prerequisites:
 
-```
+```bash
 apt install --no-install-recommends \
       python3 \
       python3-pip \
@@ -23,7 +23,7 @@ apt install --no-install-recommends \
 
 1. Setup Python virtual environment
 
-```
+```bash
 python3 -mvenv --system-site-packages venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -38,7 +38,7 @@ The first line of the file must be a comment containing a schedule for the query
 
 For instance:
 
-```
+```kql
 // 0 0,3,6,9,12,15,18,21 * * *
 // This query will run every three hours:
 AzureMonitorAlerts
@@ -49,6 +49,12 @@ AzureMonitorAlerts
 
 ## Running
 
-```
+```bash
 ./run.sh
+```
+
+If new tasks were added while the program is running, to reload them run:
+
+```bash
+./reload.sh
 ```
