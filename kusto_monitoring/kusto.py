@@ -1,4 +1,5 @@
 import logging
+import time
 
 from .config import get_conf
 from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
@@ -42,6 +43,7 @@ def run_query(query: str, retries: int = 1) -> QueryResult:
         except KustoMultiApiError as e:
             if retries > 0 and any(err in str(e) for err in retryable_errors):
                 logging.warning(f"Query execution error: {e}. Retrying in 1 minute.")
+                time.sleep(60)
             else:
                 raise
 
