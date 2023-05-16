@@ -72,5 +72,6 @@ class Scheduler(object):
                     if task.should_run(t):
                         pool.apply_async(task.run)
                 t += timedelta(minutes=1)
-                while datetime.now() < t:
-                    time.sleep((t - datetime.now()).seconds)
+                now = datetime.now()
+                if now < t:
+                    time.sleep((t - now).seconds)
